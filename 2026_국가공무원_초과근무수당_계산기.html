@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 국가공무원 초과근무수당 계산기</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e5e7eb;--accent:#2563eb;--accent2:#eff6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--text)}
+.wrap{max-width:920px;margin:36px auto;padding:0 18px}.head{margin-bottom:22px}.head h1{margin:0 0 8px;font-size:28px}.head p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 3px 12px rgba(16,24,40,.04)}
+label{display:block;font-weight:700;font-size:14px;margin:0 0 8px}.field{margin-bottom:17px}
+select,input{width:100%;padding:12px 13px;border:1px solid #d0d5dd;border-radius:10px;font-size:16px;background:#fff}
+.small{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.result{background:var(--accent2);border:1px solid #bfdbfe;border-radius:14px;padding:18px;margin-top:12px}
+.result .label{font-size:13px;color:#1d4ed8}.amount{font-size:32px;font-weight:800;margin:4px 0 8px}.sub{font-size:13px;color:var(--muted);line-height:1.7}
+button{width:100%;border:0;background:var(--accent);color:#fff;padding:13px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer}.formula{margin-top:16px;padding:13px;background:#f8fafc;border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.7}
+.note{margin-top:18px;color:var(--muted);font-size:12px;line-height:1.65}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.head h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>2026 국가공무원 초과근무수당 계산기</h1>
+    <p>일반직 국가공무원 기준 · 2026년 봉급표 및 현행 수당 규정 반영</p>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="field">
+        <label for="rank">직급</label>
+        <select id="rank">
+          <option value="9">9급</option><option value="8">8급</option>
+          <option value="7" selected>7급</option><option value="6">6급</option>
+          <option value="5">5급</option><option value="4">4급</option>
+          <option value="3">3급</option><option value="2">2급</option><option value="1">1급</option>
+        </select>
+        <div class="small">시간외근무수당 기준호봉은 일반직의 경우 해당 계급 10호봉입니다.</div>
+      </div>
+
+      <div class="field">
+        <label for="hours">월 인정 시간외근무시간</label>
+        <input id="hours" type="number" min="0" step="0.01" value="20">
+        <div class="small">규정에 따라 이미 산정된 ‘인정 시간’을 입력합니다. 월 57시간 제한은 예외가 있을 수 있습니다.</div>
+      </div>
+
+      <div class="field">
+        <label for="rate">봉급기준액 적용률</label>
+        <select id="rate">
+          <option value="0.60">8급·9급 — 60%</option>
+          <option value="0.55" selected>7급 이상 — 55%</option>
+        </select>
+      </div>
+
+      <button onclick="calc()">계산하기</button>
+    </section>
+
+    <section class="card">
+      <label>계산 결과</label>
+      <div class="result">
+        <div class="label">시간외근무수당(실적분)</div>
+        <div class="amount" id="total">-</div>
+        <div class="sub">
+          시간당 단가: <b id="hourly">-</b><br>
+          적용 기준호봉: <b id="baseGrade">-</b><br>
+          기준호봉 봉급액: <b id="salary">-</b>
+        </div>
+      </div>
+      <div class="formula" id="formula">봉급기준액 × 1/209 × 150% × 인정시간</div>
+      <div class="note">
+        ※ 국가공무원 일반직 기준 참고용입니다.<br>
+        ※ 실제 지급액은 소속기관의 지급기준, 근무명령, 시간외근무시간 산정 및 개인별 적용규정에 따라 달라질 수 있습니다.
+      </div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:18px">
+    <h3 style="margin-top:0">2026년 일반직 기준호봉(10호봉)</h3>
+    <div class="row">
+      <div><b>9급</b><br>2,542,700원</div>
+      <div><b>8급</b><br>2,813,000원</div>
+      <div><b>7급</b><br>3,133,300원</div>
+      <div><b>6급</b><br>3,468,700원</div>
+      <div><b>5급</b><br>4,066,800원</div>
+      <div><b>4급</b><br>4,497,700원</div>
+      <div><b>3급</b><br>5,113,600원</div>
+      <div><b>2급</b><br>5,642,500원</div>
+      <div><b>1급</b><br>6,241,300원</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const salary10={"9":2542700,"8":2813000,"7":3133300,"6":3468700,"5":4066800,"4":4497700,"3":5113600,"2":5642500,"1":6241300};
+const fmt=n=>new Intl.NumberFormat("ko-KR").format(Math.round(n))+"원";
+function calc(){
+  const rank=document.getElementById("rank").value;
+  const hours=Math.max(0,Number(document.getElementById("hours").value)||0);
+  const rate=Number(document.getElementById("rate").value);
+  const salary=salary10[rank];
+  const hourly=salary*rate/209*1.5;
+  const total=hourly*hours;
+  document.getElementById("hourly").textContent=fmt(hourly);
+  document.getElementById("total").textContent=fmt(total);
+  document.getElementById("salary").textContent=fmt(salary);
+  document.getElementById("baseGrade").textContent=rank+"급 10호봉";
+  document.getElementById("formula").textContent=`(${fmt(salary)} × ${(rate*100).toFixed(0)}%) ÷ 209 × 150% × ${hours}시간 = ${fmt(total)}`;
+}
+document.getElementById("rank").addEventListener("change",()=>{
+  const r=document.getElementById("rank").value;
+  document.getElementById("rate").value=(r==="8"||r==="9")?"0.60":"0.55";
+  calc();
+});
+document.getElementById("hours").addEventListener("input",calc);
+document.getElementById("rate").addEventListener("change",calc);
+calc();
+</script>
+</body>
+</html>
